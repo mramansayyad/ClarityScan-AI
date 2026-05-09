@@ -81,8 +81,9 @@ export default function HomePage() {
 
         const analysisResult = await documentAnalysisAndJsonOutput({ documentContent });
         setAnalysis(analysisResult);
-      } catch (e: any) {
-        const errorMessage = e.message || 'An unknown error occurred during analysis.';
+      } catch (e) {
+        const errorMessage =
+          e instanceof Error ? e.message : 'An unknown error occurred during analysis.';
         setError(errorMessage);
         toast({
           variant: 'destructive',

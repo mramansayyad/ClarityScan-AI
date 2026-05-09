@@ -49,7 +49,7 @@ const formatBytes = (bytes: number, decimals = 2) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
-const renderValue = (value: any) => {
+const renderValue = (value: unknown) => {
   if (value === null || value === undefined) {
     return <span className="text-muted-foreground">N/A</span>;
   }

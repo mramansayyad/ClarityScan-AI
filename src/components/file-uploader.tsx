@@ -29,26 +29,29 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const handleFileValidation = (file: File): boolean => {
-    if (!acceptedFileTypes.includes(file.type)) {
-      toast({
-        variant: 'destructive',
-        title: 'Unsupported File Type',
-        description: `File type '${file.type}' is not supported.`,
-      });
-      return false;
-    }
-    // 50MB limit
-    if (file.size > 50 * 1024 * 1024) {
-      toast({
-        variant: 'destructive',
-        title: 'File Too Large',
-        description: 'Please upload a file smaller than 50MB.',
-      });
-      return false;
-    }
-    return true;
-  };
+  const handleFileValidation = useCallback(
+    (file: File): boolean => {
+      if (!acceptedFileTypes.includes(file.type)) {
+        toast({
+          variant: 'destructive',
+          title: 'Unsupported File Type',
+          description: `File type '${file.type}' is not supported.`,
+        });
+        return false;
+      }
+      // 50MB limit
+      if (file.size > 50 * 1024 * 1024) {
+        toast({
+          variant: 'destructive',
+          title: 'File Too Large',
+          description: 'Please upload a file smaller than 50MB.',
+        });
+        return false;
+      }
+      return true;
+    },
+    [toast]
+  );
 
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -80,7 +83,7 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
         }
       }
     },
-    [onFileUpload, toast]
+    [onFileUpload, handleFileValidation]
   );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
