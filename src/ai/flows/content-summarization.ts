@@ -18,12 +18,18 @@ export type ContentSummarizationInput = z.infer<typeof ContentSummarizationInput
 const ContentSummarizationOutputSchema = z.object({
   executiveSummary: z.string().describe('A concise executive summary of the document content.'),
   keyInsights: z.array(z.string()).describe('A list of key insights derived from the document.'),
-  importantPoints: z.array(z.string()).describe('A list of important points or crucial aspects highlighted in the document.'),
-  riskFlags: z.array(z.string()).describe('A list of potential risks or anomalies identified in the document.'),
+  importantPoints: z
+    .array(z.string())
+    .describe('A list of important points or crucial aspects highlighted in the document.'),
+  riskFlags: z
+    .array(z.string())
+    .describe('A list of potential risks or anomalies identified in the document.'),
 });
 export type ContentSummarizationOutput = z.infer<typeof ContentSummarizationOutputSchema>;
 
-export async function summarizeContent(input: ContentSummarizationInput): Promise<ContentSummarizationOutput> {
+export async function summarizeContent(
+  input: ContentSummarizationInput
+): Promise<ContentSummarizationOutput> {
   return contentSummarizationFlow(input);
 }
 

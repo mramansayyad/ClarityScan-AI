@@ -12,56 +12,171 @@ import { z } from 'genkit';
 
 const ExtractedFieldValueConfidenceSchema = z.object({
   value: z.union([z.string(), z.number()]), // Allow string or number for value
-  confidence: z.number().min(0).max(1).describe('Confidence score for this specific extraction (0-1).'),
+  confidence: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe('Confidence score for this specific extraction (0-1).'),
 });
 
 const ExtractedCurrencyValueConfidenceSchema = z.object({
   value: z.number(),
   currency: z.string().optional(),
-  confidence: z.number().min(0).max(1).describe('Confidence score for this specific extraction (0-1).'),
+  confidence: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe('Confidence score for this specific extraction (0-1).'),
 });
 
 const StructuredDataExtractionInputSchema = z.object({
-  documentContent: z.string().describe('The textual content of the document after any OCR processing, or original text content.'),
-  sourceFileName: z.string().optional().describe('The original file name of the document, for context.'),
+  documentContent: z
+    .string()
+    .describe(
+      'The textual content of the document after any OCR processing, or original text content.'
+    ),
+  sourceFileName: z
+    .string()
+    .optional()
+    .describe('The original file name of the document, for context.'),
 });
 export type StructuredDataExtractionInput = z.infer<typeof StructuredDataExtractionInputSchema>;
 
 const StructuredDataExtractionOutputSchema = z.object({
-  document_type: z.string().describe('The automatically detected document type (e.g., invoice, receipt, contract, resume, bank statement, report, email, medical record, legal document, or other).'),
-  confidence_score: z.number().min(0).max(1).describe('Confidence score for the document type classification (0-1).'),
-  extracted_fields: z.object({
-    names: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected names.'),
-    emails: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string().email() })).describe('List of detected email addresses.'),
-    phoneNumbers: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected phone numbers.'),
-    addresses: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected addresses.'),
-    dates: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) })).describe('List of detected dates, formatted as YYYY-MM-DD.'),
-    ids: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected identification numbers.'),
-    invoiceNumbers: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected invoice numbers.'),
-    orderNumbers: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected order numbers.'),
-    productNames: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() })).describe('List of detected product names.'),
-    quantities: z.array(ExtractedFieldValueConfidenceSchema.extend({ value: z.number() })).describe('List of detected quantities.'),
-    prices: z.array(ExtractedCurrencyValueConfidenceSchema).describe('List of detected prices, as numerical values, with optional currency and confidence.'),
-    totals: z.array(ExtractedCurrencyValueConfidenceSchema).describe('List of detected totals, as numerical values, with optional currency and confidence.'),
-    other: z.array(z.object({ key: z.string(), value: z.union([z.string(), z.number(), z.boolean()]), confidence: z.number().min(0).max(1) })).describe('List of other relevant key-value pairs not covered by specific fields, each with a key, value, and confidence score.'),
-  }).describe('Structured and normalized data extracted from the document, with confidence levels for each item. Arrays for multiple records.'),
-  summary: z.string().nullable().describe('An executive summary of the content, or null if not applicable.'),
-  key_points: z.array(z.string()).nullable().describe('A list of important points or null if not applicable.'),
-  numerical_analysis: z.object({
-    total_sum: z.number().optional().describe('Sum of all numerical values like prices and totals.'),
-    average_value: z.number().optional().describe('Average of significant numerical values.'),
-    trends: z.string().optional().describe('Description of any detected trends in numerical data.'),
-    missing_values: z.array(z.string()).optional().describe('List of numerical values that seem missing or incomplete.'),
-    outliers: z.array(z.object({ value: z.number(), description: z.string() })).optional().describe('List of identified numerical outliers with their descriptions.'),
-  }).nullable().describe('Analysis of numerical data, or null if no numerical data or analysis is applicable.'),
-  sentiment_analysis: z.object({
-    sentiment: z.enum(['Positive', 'Neutral', 'Negative', 'Mixed']).optional().describe('Overall sentiment of the text content.'),
-    confidence: z.number().min(0).max(1).optional().describe('Confidence score for the sentiment analysis (0-1).'),
-    emotional_tone: z.string().optional().describe('Description of the emotional tone of the content.'),
-  }).nullable().describe('Sentiment analysis for text-heavy content, or null if not applicable.'),
-  risk_flags: z.array(z.string()).nullable().describe('List of potential risks or anomalies detected, or null if none.'),
-  missing_data: z.array(z.string()).nullable().describe('List of data fields that were expected but could not be extracted or were unclear.'),
-  recommended_actions: z.array(z.string()).nullable().describe('List of recommended actions based on the analysis, or null if none.'),
+  document_type: z
+    .string()
+    .describe(
+      'The automatically detected document type (e.g., invoice, receipt, contract, resume, bank statement, report, email, medical record, legal document, or other).'
+    ),
+  confidence_score: z
+    .number()
+    .min(0)
+    .max(1)
+    .describe('Confidence score for the document type classification (0-1).'),
+  extracted_fields: z
+    .object({
+      names: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected names.'),
+      emails: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string().email() }))
+        .describe('List of detected email addresses.'),
+      phoneNumbers: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected phone numbers.'),
+      addresses: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected addresses.'),
+      dates: z
+        .array(
+          ExtractedFieldValueConfidenceSchema.extend({
+            value: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+          })
+        )
+        .describe('List of detected dates, formatted as YYYY-MM-DD.'),
+      ids: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected identification numbers.'),
+      invoiceNumbers: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected invoice numbers.'),
+      orderNumbers: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected order numbers.'),
+      productNames: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.string() }))
+        .describe('List of detected product names.'),
+      quantities: z
+        .array(ExtractedFieldValueConfidenceSchema.extend({ value: z.number() }))
+        .describe('List of detected quantities.'),
+      prices: z
+        .array(ExtractedCurrencyValueConfidenceSchema)
+        .describe(
+          'List of detected prices, as numerical values, with optional currency and confidence.'
+        ),
+      totals: z
+        .array(ExtractedCurrencyValueConfidenceSchema)
+        .describe(
+          'List of detected totals, as numerical values, with optional currency and confidence.'
+        ),
+      other: z
+        .array(
+          z.object({
+            key: z.string(),
+            value: z.union([z.string(), z.number(), z.boolean()]),
+            confidence: z.number().min(0).max(1),
+          })
+        )
+        .describe(
+          'List of other relevant key-value pairs not covered by specific fields, each with a key, value, and confidence score.'
+        ),
+    })
+    .describe(
+      'Structured and normalized data extracted from the document, with confidence levels for each item. Arrays for multiple records.'
+    ),
+  summary: z
+    .string()
+    .nullable()
+    .describe('An executive summary of the content, or null if not applicable.'),
+  key_points: z
+    .array(z.string())
+    .nullable()
+    .describe('A list of important points or null if not applicable.'),
+  numerical_analysis: z
+    .object({
+      total_sum: z
+        .number()
+        .optional()
+        .describe('Sum of all numerical values like prices and totals.'),
+      average_value: z.number().optional().describe('Average of significant numerical values.'),
+      trends: z
+        .string()
+        .optional()
+        .describe('Description of any detected trends in numerical data.'),
+      missing_values: z
+        .array(z.string())
+        .optional()
+        .describe('List of numerical values that seem missing or incomplete.'),
+      outliers: z
+        .array(z.object({ value: z.number(), description: z.string() }))
+        .optional()
+        .describe('List of identified numerical outliers with their descriptions.'),
+    })
+    .nullable()
+    .describe(
+      'Analysis of numerical data, or null if no numerical data or analysis is applicable.'
+    ),
+  sentiment_analysis: z
+    .object({
+      sentiment: z
+        .enum(['Positive', 'Neutral', 'Negative', 'Mixed'])
+        .optional()
+        .describe('Overall sentiment of the text content.'),
+      confidence: z
+        .number()
+        .min(0)
+        .max(1)
+        .optional()
+        .describe('Confidence score for the sentiment analysis (0-1).'),
+      emotional_tone: z
+        .string()
+        .optional()
+        .describe('Description of the emotional tone of the content.'),
+    })
+    .nullable()
+    .describe('Sentiment analysis for text-heavy content, or null if not applicable.'),
+  risk_flags: z
+    .array(z.string())
+    .nullable()
+    .describe('List of potential risks or anomalies detected, or null if none.'),
+  missing_data: z
+    .array(z.string())
+    .nullable()
+    .describe('List of data fields that were expected but could not be extracted or were unclear.'),
+  recommended_actions: z
+    .array(z.string())
+    .nullable()
+    .describe('List of recommended actions based on the analysis, or null if none.'),
 });
 export type StructuredDataExtractionOutput = z.infer<typeof StructuredDataExtractionOutputSchema>;
 
@@ -132,6 +247,8 @@ const structuredDataExtractionFlow = ai.defineFlow(
   }
 );
 
-export async function structuredDataExtraction(input: StructuredDataExtractionInput): Promise<StructuredDataExtractionOutput> {
+export async function structuredDataExtraction(
+  input: StructuredDataExtractionInput
+): Promise<StructuredDataExtractionOutput> {
   return structuredDataExtractionFlow(input);
 }

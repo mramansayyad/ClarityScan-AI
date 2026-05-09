@@ -36,7 +36,9 @@ const DocumentTypeClassificationOutputSchema = z.object({
     .max(1)
     .describe('A confidence score (0-1) for the document type classification.'),
 });
-export type DocumentTypeClassificationOutput = z.infer<typeof DocumentTypeClassificationOutputSchema>;
+export type DocumentTypeClassificationOutput = z.infer<
+  typeof DocumentTypeClassificationOutputSchema
+>;
 
 const classifyDocumentTypePrompt = ai.definePrompt({
   name: 'classifyDocumentTypePrompt',
@@ -66,6 +68,8 @@ const documentTypeClassificationFlow = ai.defineFlow(
   }
 );
 
-export async function classifyDocumentType(input: DocumentTypeClassificationInput): Promise<DocumentTypeClassificationOutput> {
+export async function classifyDocumentType(
+  input: DocumentTypeClassificationInput
+): Promise<DocumentTypeClassificationOutput> {
   return documentTypeClassificationFlow(input);
 }

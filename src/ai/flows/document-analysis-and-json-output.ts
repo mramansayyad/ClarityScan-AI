@@ -14,9 +14,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const DocumentAnalysisInputSchema = z.object({
-  documentContent: z
-    .string()
-    .describe('The raw text content of the document to be analyzed.'),
+  documentContent: z.string().describe('The raw text content of the document to be analyzed.'),
 });
 export type DocumentAnalysisInput = z.infer<typeof DocumentAnalysisInputSchema>;
 
@@ -34,22 +32,13 @@ const DocumentAnalysisOutputSchema = z.object({
   extracted_fields: z
     .record(
       z.string(),
-      z.union([
-        z.string(),
-        z.array(z.string()),
-        z.number(),
-        z.boolean(),
-        z.null(),
-      ])
+      z.union([z.string(), z.array(z.string()), z.number(), z.boolean(), z.null()])
     )
     .nullable()
     .describe(
       'Structured and normalized data extracted from the document, including names, emails, phone numbers, addresses, dates (YYYY-MM-DD), IDs, invoice numbers, order numbers, product names, quantities, prices, totals. Remove duplicates, standardize currency values. If multiple records are present, return them as arrays. If a field is not found or is unclear, set its value to null or omit it. Do not hallucinate missing data.'
     ),
-  summary: z
-    .string()
-    .nullable()
-    .describe('An executive summary of the document content.'),
+  summary: z.string().nullable().describe('An executive summary of the document content.'),
   key_points: z
     .array(z.string())
     .nullable()
@@ -57,9 +46,7 @@ const DocumentAnalysisOutputSchema = z.object({
   numerical_analysis: z
     .array(
       z.object({
-        insight: z
-          .string()
-          .describe('Description of the numerical insight or calculation.'),
+        insight: z.string().describe('Description of the numerical insight or calculation.'),
         value: z
           .any()
           .optional()
@@ -68,10 +55,7 @@ const DocumentAnalysisOutputSchema = z.object({
           .string()
           .optional()
           .describe('Observed trend (e.g., "increasing", "decreasing", "stable").'),
-        outliers: z
-          .array(z.any())
-          .optional()
-          .describe('Identified outlier values if applicable.'),
+        outliers: z.array(z.any()).optional().describe('Identified outlier values if applicable.'),
         missing_values: z
           .array(z.string())
           .optional()
@@ -94,7 +78,9 @@ const DocumentAnalysisOutputSchema = z.object({
         .describe('Confidence score (0-1) for the sentiment analysis.'),
       emotional_tone: z
         .array(z.string())
-        .describe('Assessment of emotional tones present (e.g., Joy, Sadness, Anger, Surprise, Fear, Neutral).'),
+        .describe(
+          'Assessment of emotional tones present (e.g., Joy, Sadness, Anger, Surprise, Fear, Neutral).'
+        ),
     })
     .nullable()
     .describe(
