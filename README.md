@@ -1,6 +1,6 @@
 # 🛡️ ClarityScan AI
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)]()
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![Genkit](https://img.shields.io/badge/Genkit-AI-blue)](https://github.com/firebase/genkit)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-orange)](https://deepmind.google/technologies/gemini/)
@@ -135,4 +135,4 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a Proprietary License. All rights reserved by mramansayyad. See the [LICENSE](LICENSE) file for details.
