@@ -113,20 +113,6 @@ src/
 
 ---
 
-## 🚀 Deployment
-
-### Vercel
-
-Click the button below to deploy to Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmramansayyad%2FClarityScan-AI)
-
-### Docker/Cloud Run
-
-This project is containerized and ready for Google Cloud Run or any Docker-compatible hosting.
-
----
-
 ## 🤝 Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
